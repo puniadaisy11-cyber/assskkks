@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Chaos 💀💘</title>
+
+<style>
+body{
+  font-family:'Comic Sans MS',sans-serif;
+  background:#ffe6f0;
+  text-align:center;
+  overflow:hidden;
+  padding:30px;
+}
+
+h1,h2{color:#ff3366}
+
+button{
+  padding:15px 40px;
+  font-size:20px;
+  border:none;
+  border-radius:15px;
+  cursor:pointer;
+  margin:10px;
+}
+
+.yes{
+  background:#ff3366;
+  color:white;
+}
+
+.no{
+  background:#999;
+  color:white;
+  position:absolute;
+}
+
+.heart{
+  position:absolute;
+  font-size:24px;
+  animation:float 4s linear infinite;
+}
+
+@keyframes float{
+  0%{transform:translateY(0);opacity:1}
+  100%{transform:translateY(-800px);opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<div id="app"></div>
+
+<audio id="song">
+  <source src="downloadfile.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let stage = 1;
+let noClicks = 0;
+let noCanRun = true;
+const app = document.getElementById("app");
+
+function render(){
+
+  if(stage === 1){
+    app.innerHTML = `
+      <h1>i was thinking a lot.. and i may have coded my feelings..</h1>
+      <h2>you wanna know?</h2>
+      <button class="yes" onclick="next()">YES</button>
+      <button class="no" style="position:relative" onclick="next()">NO</button>
+    `;
+  }
+
+  if(stage === 2){
+    app.innerHTML = `
+      <h2>will you be my valentine?</h2>
+      <button class="yes" onclick="next()">YES</button>
+      <button class="no" style="position:relative" onclick="next()">NO</button>
+    `;
+  }
+
+  if(stage === 3){
+    app.innerHTML = `
+      <h2>acha try again 💀🙏🏼</h2>
+      <h2>will you be my valentine?</h2>
+      <button class="yes">YES</button>
+      <button class="no" id="noBtn">NO</button>
+      <h3 id="scream"></h3>
+    `;
+
+    const noBtn = document.getElementById("noBtn");
+
+    // move ONLY on hover, not click
+    noBtn.addEventListener("mouseover", ()=>{
+      if(noCanRun){
+        moveNo(noBtn);
+      }
+    });
+
+    // count clicks properly
+    noBtn.addEventListener("click", ()=>{
+      noClicks++;
+
+      if(noClicks < 5){
+        document.getElementById("scream").innerText =
+          `STOP 😭✋ (${noClicks}/5)`;
+      }
+
+      if(noClicks === 5){
+        noCanRun = false;
+        document.getElementById("scream").innerText =
+          "OKAY OKAY 😭 I CAN'T RUN ANYMORE";
+        noBtn.style.position = "relative";
+        noBtn.style.left = "0";
+        noBtn.style.top = "0";
+      }
+
+      if(noClicks > 5){
+        next(); // NOW it works
+      }
+    });
+  }
+
+  if(stage === 4){
+    finalScene();
+  }
+}
+
+function moveNo(btn){
+  btn.style.left = Math.random()*(window.innerWidth-120)+"px";
+  btn.style.top = Math.random()*(window.innerHeight-120)+"px";
+}
+
+function next(){
+  stage++;
+  render();
+}
+
+function finalScene(){
+  app.innerHTML = `
+    <h1>OKAY OKAY 😌💖</h1>
+    <h2>Will you be my Valentine?</h2>
+  `;
+
+  document.getElementById("song").play();
+
+  for(let i=0;i<30;i++){
+    let heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random()*window.innerWidth+"px";
+    heart.style.bottom = "0px";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),4000);
+  }
+}
+
+render();
+</script>
+
+</body>
+</html>
